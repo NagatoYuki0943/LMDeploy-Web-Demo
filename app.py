@@ -83,6 +83,10 @@ pipe = pipeline(
 #     {
 #         "role": "user",
 #         "content": "Thanks!"
+#     },
+#     {
+#         "role": "assistant",
+#         "content": "You are welcome."
 #     }
 # ]
 #----------------------------------------------------------------------#
