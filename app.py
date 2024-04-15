@@ -157,15 +157,22 @@ def chat(
 
 
 def regenerate(
-    query: str,
     history: list,
     max_new_tokens: int = 1024,
     top_p: float = 0.8,
     top_k: int = 40,
-    temperature: float = 0.8
+    temperature: float = 0.8,
 ) -> tuple[str, list]:
     """重新生成最后一次对话的内容"""
-    return chat(query, history, max_new_tokens, top_p, top_k, temperature, regenerate=True)
+    # 只返回history
+    return chat("", history, max_new_tokens, top_p, top_k, temperature, regenerate=True)[1]
+
+
+def revocery(history: list):
+    """恢复到上一轮对话"""
+    if len(history) > 0:
+        history.pop(-1)
+    return history
 
 
 block = gr.Blocks()
@@ -181,14 +188,6 @@ with block as demo:
         with gr.Column(scale=4):
             # 创建聊天框
             chatbot = gr.Chatbot(height=450, show_copy_button=True)
-
-            with gr.Row():
-                # 创建一个文本框组件，用于输入 prompt。
-                query = gr.Textbox(label="Prompt/问题")
-                # 创建提交按钮。
-                # variant https://www.gradio.app/docs/button
-                # scale https://www.gradio.app/guides/controlling-layout
-                submit = gr.Button("Chat", variant="primary", scale=0)
 
             with gr.Row():
                 max_new_tokens = gr.Slider(
@@ -221,10 +220,19 @@ with block as demo:
                 )
 
             with gr.Row():
+                # 创建一个文本框组件，用于输入 prompt。
+                query = gr.Textbox(label="Prompt/问题")
+                # 创建提交按钮。
+                # variant https://www.gradio.app/docs/button
+                # scale https://www.gradio.app/guides/controlling-layout
+                submit = gr.Button("Chat", variant="primary", scale=0)
+
+            with gr.Row():
                 # 创建一个重新生成按钮，用于重新生成当前对话内容。
-                regen = gr.Button("Regenerate", variant="secondary")
+                regen = gr.Button("Retry", variant="secondary")
+                undo = gr.Button("Undo", variant="secondary")
                 # 创建一个清除按钮，用于清除聊天机器人组件的内容。
-                clear = gr.ClearButton(components=[chatbot], value="Clear console", variant="stop")
+                clear = gr.ClearButton(components=[chatbot], value="Clear", variant="stop")
 
         # 回车提交
         query.submit(
@@ -243,9 +251,17 @@ with block as demo:
         # 重新生成
         regen.click(
             regenerate,
-            inputs=[query, chatbot, max_new_tokens, top_p, top_k, temperature],
-            outputs=[query, chatbot]
+            inputs=[chatbot, max_new_tokens, top_p, top_k, temperature],
+            outputs=[chatbot]
         )
+
+        # 撤销
+        undo.click(
+            revocery,
+            inputs=[chatbot],
+            outputs=[chatbot]
+        )
+
 
     gr.Markdown("""提醒：<br>
     1. 使用中如果出现异常，将会在文本输入框进行展示，请不要惊慌。 <br>
