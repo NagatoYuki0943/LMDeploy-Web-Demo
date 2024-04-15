@@ -6,8 +6,8 @@ from lmdeploy import pipeline, GenerationConfig, TurbomindEngineConfig, ChatTemp
 
 
 model_path = './models/internlm2-chat-1_8b'
-# os.system(f'git clone https://code.openxlab.org.cn/OpenLMLab/internlm2-chat-1.8b {model_path}')
-# os.system(f'cd {model_path} && git lfs pull')
+os.system(f'git clone https://code.openxlab.org.cn/OpenLMLab/internlm2-chat-1.8b {model_path}')
+os.system(f'cd {model_path} && git lfs pull')
 
 # 可以直接使用transformers的模型,会自动转换格式
 # https://lmdeploy.readthedocs.io/zh-cn/latest/api/pipeline.html#turbomindengineconfig
@@ -254,7 +254,10 @@ with block as demo:
 # threads to consume the request
 gr.close_all()
 
+# 设置队列启动，队列最大长度为 100
+demo.queue(max_size=100)
+
 # 启动新的 Gradio 应用，设置分享功能为 True，并使用环境变量 PORT1 指定服务器端口。
 # demo.launch(share=True, server_port=int(os.environ['PORT1']))
 # 直接启动
-demo.launch()
+demo.launch(server_name="127.0.0.1", server_port=7860)
