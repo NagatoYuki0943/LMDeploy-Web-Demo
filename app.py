@@ -225,14 +225,14 @@ with block as demo:
                 # 创建提交按钮。
                 # variant https://www.gradio.app/docs/button
                 # scale https://www.gradio.app/guides/controlling-layout
-                submit = gr.Button("Chat", variant="primary", scale=0)
+                submit = gr.Button("💬 Chat", variant="primary", scale=0)
 
             with gr.Row():
                 # 创建一个重新生成按钮，用于重新生成当前对话内容。
-                regen = gr.Button("Retry", variant="secondary")
-                undo = gr.Button("Undo", variant="secondary")
+                regen = gr.Button("🔄 Retry", variant="secondary")
+                undo = gr.Button("↩️ Undo", variant="secondary")
                 # 创建一个清除按钮，用于清除聊天机器人组件的内容。
-                clear = gr.ClearButton(components=[chatbot], value="Clear", variant="stop")
+                clear = gr.ClearButton(components=[chatbot], value="🗑️ Clear", variant="stop")
 
         # 回车提交
         query.submit(
