@@ -187,7 +187,7 @@ with block as demo:
     with gr.Row():
         with gr.Column(scale=4):
             # 创建聊天框
-            chatbot = gr.Chatbot(height=450, show_copy_button=True)
+            chatbot = gr.Chatbot(height=800, show_copy_button=True)
 
             with gr.Row():
                 max_new_tokens = gr.Slider(
@@ -261,7 +261,6 @@ with block as demo:
             inputs=[chatbot],
             outputs=[chatbot]
         )
-
 
     gr.Markdown("""提醒：<br>
     1. 使用中如果出现异常，将会在文本输入框进行展示，请不要惊慌。 <br>
