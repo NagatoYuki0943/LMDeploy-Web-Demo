@@ -1,3 +1,4 @@
+# https://github.com/InternLM/lmdeploy/blob/main/lmdeploy/serve/gradio/turbomind_coupled.py
 # https://github.com/InternLM/lmdeploy/blob/main/lmdeploy/serve/gradio/vl.py
 import os
 import gradio as gr
